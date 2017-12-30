@@ -2,7 +2,7 @@
 simple expression evaluator written in golang
 
 ## examples
-```
+```golang
 import (
 	"fmt"
 	"github.com/zhiruchen/eep"
