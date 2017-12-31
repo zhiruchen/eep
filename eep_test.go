@@ -71,6 +71,26 @@ func TestEvalWithEnv(t *testing.T) {
 		s1, s2 := args[0].(string), args[1].(string)
 		return s1 + s2
 	}
+
+	add := func(args ...interface{}) interface{} {
+		n1, n2 := args[0].(int), args[1].(int)
+		return n1 + n2
+	}
+
+	exponent := func(args ...interface{}) interface{} {
+		n1, n2 := args[0].(float64), args[1].(float64)
+		var n float64 = 1
+		var i int64 = 1
+		for i = 1; i <= int64(n2); i++ {
+			n *= n1
+		}
+		return n
+	}
+
+	len := func(args ...interface{}) interface{} {
+		return len(args[0].([]int))
+	}
+
 	testCases := []struct {
 		expression string
 		val        interface{}
@@ -85,6 +105,21 @@ func TestEvalWithEnv(t *testing.T) {
 			`Concat("x", "y")`,
 			"xy",
 			map[string]interface{}{"Concat": f},
+		},
+		{
+			"add(a, b)",
+			100,
+			map[string]interface{}{"add": add, "a": 99, "b": 1},
+		},
+		{
+			"expn(2, 10)==1024",
+			true,
+			map[string]interface{}{"expn": exponent},
+		},
+		{
+			"len(x)",
+			6,
+			map[string]interface{}{"len": len, "x": []int{1, 3, 2, 8, 6, 100}},
 		},
 	}
 
